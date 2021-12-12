@@ -97,4 +97,4 @@ def monitor_alert(status):
 if __name__ == '__main__':
     sched.init_app(app)
     sched.start()
-    app.run(host = '0.0.0.0', debug=True)
+    app.run(host = '0.0.0.0', debug=False)
