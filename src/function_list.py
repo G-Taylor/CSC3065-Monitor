@@ -7,3 +7,10 @@ FUNCTIONS = {
     "average": "http://avgword.40234272.qpc.hal.davecutting.uk",
     "and": "http://andcount.40234272.qpc.hal.davecutting.uk"
 }
+
+# Added the proxies so they can be used instead of the endpoints
+PROXIES = {
+    "main": "http://proxy.40234272.qpc.hal.davecutting.uk",
+    "backup": "http://proxybackup.40234272.qpc.hal.davecutting.uk",
+    "backup2": "http://proxybackup2.40234272.qpc.hal.davecutting.uk"
+}

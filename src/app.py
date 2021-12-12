@@ -1,17 +1,17 @@
 import time
-import requests
-import flask
 import json
-from flask import Flask, request, render_template
-from essential_generators import DocumentGenerator
-from flask_apscheduler import APScheduler
+import flask
+import requests
+
 from datetime import datetime
 from flask_mail import Mail, Message
-from function_list import FUNCTIONS
+from flask_apscheduler import APScheduler
+from function_list import FUNCTIONS, PROXIES
+from flask import Flask, request, render_template
+from essential_generators import DocumentGenerator
 
 # scheduler to run the monitor checks
 sched = APScheduler()
-
 app = Flask(__name__)
 
 @sched.task("interval", id="do_monitor_checks", minutes=60, misfire_grace_time=900)
@@ -23,17 +23,18 @@ def home():
         total_time_for_monitor = 0
         test_num = 0
         last_ran = datetime.now()
+        proxy = get_proxy()
 
         # loop through the external functions file and test each function type with a random string
         for func in FUNCTIONS:
             counter = 0
             # Do 5 tests per function
             while counter < 5:
-                sentence = gen.sentence()   # generate a randome sentence to test the function
-                
+                sentence = gen.sentence()   # generate a random sentence to test the function
+            
                 # Time how long each test takes, and record total time for all functions
                 start_time = time.time()
-                requestURL = f"{FUNCTIONS[func]}/?func={func}&text={sentence}"
+                requestURL = f"{proxy}/?func={func}&text={sentence}"
                 response = requests.get(requestURL)
                 end_time = time.time()
                 total = end_time - start_time
@@ -62,9 +63,17 @@ def home():
                 counter += 1
                 test_num += 1
 
-        print ("scheduler working")
+        print ("scheduler running")
         # return the results and timing details to the index template
         return render_template("/index.html", results=results, duration=total_time_for_monitor, last_ran=last_ran)
+
+# method that returns a working proxy
+def get_proxy():
+    for proxy in PROXIES:
+        response = requests.get(PROXIES[proxy])
+        if response.status_code == 200:
+            print(f"Using proxy: {proxy}")
+            return PROXIES[proxy]
 
 
 # method to send an email alert to desired recipients if any code other than 200 is reported
