@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <title>Editor Monitor</title>
+    <style></style>
+    </head>
+    <body style="margin: 5px;">
+        <h3>Monitor Results</h3>
+        <h4>Time Taken: {{ duration }} seconds</h4>
+        <h4>Last Ran: {{ last_ran }}</h4>
+            <div class="table-responsive-sm" style="width: 100%">
+              <table id="data" class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Function</th>
+                      <th scope="col">Sentence</th>
+                      <th scope="col">Answer</th>
+                      <th scope="col">Time</th>
+                      <th scope="col">Response</th>
+                      <th scope="col">Error</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for result in results %}
+                      <tr>
+                          <td>{{ result.test }} </td>
+                          <td>{{ result.function }}</td>
+                          <td>{{ result.sentence }}</td>
+                          <td>{{ result.answer }}</td>
+                          <td>{{ result.time }}</td>
+                          <td style="font-weight: bold;">{{ result.response }}</td>
+                          <td>{{ result.error }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+              </table>
+            </div>
+    </body>
+</html>
